@@ -1,16 +1,18 @@
 from fastapi import FastAPI, Response, Cookie, Depends, status, HTTPException
 from fastapi.security import HTTPBasic, HTTPBasicCredentials, OAuth2PasswordBearer
 from datetime import datetime, timezone, timedelta
-
 import jwt
 
+from config import settings
 from schemas import User
+
+
 
 app = FastAPI()
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 # security = HTTPBasic
 
-SECRET_KEY = "baa944b6ea3b7c9f904d0d8b873503d5fc70379e415ae9ca0296f56ec5bac5a8"
+SECRET_KEY = settings.secret_key
 ALGORITHM = "HS256"
 
 USERS_DATA = [User(**{"username": "user1", "password": "pass1"}), 
