@@ -1,3 +1,12 @@
+from fastapi import Depends, HTTPException, status
+from fastapi.security import HTTPBasic, HTTPBasicCredentials, OAuth2PasswordBearer
+from datetime import datetime, timezone, timedelta
+import jwt
+
+from src.config import settings
+from src.main import app
+from goods.models import User
+
 
 SECRET_KEY = settings.secret_key
 ALGORITHM = "HS256"
@@ -5,6 +14,7 @@ ALGORITHM = "HS256"
 USERS_DATA = [User(**{"username": "user1", "password": "pass1"}), 
              User(**{"username": "user2", "password": "pass2"})]
 
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 
 def get_user_from_db(username: str):
     for user in USERS_DATA:
