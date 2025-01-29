@@ -4,7 +4,9 @@ from sqlalchemy.orm import relationship, Mapped, mapped_column
 from datetime import date
 from typing import Annotated
 
-from database import Base
+from core.database import Base
+from schemas.goods.category import CategoryReturn
+
 
 intpk = Annotated[int, mapped_column(autoincrement=True, primary_key=True)]
 
@@ -16,12 +18,18 @@ class Category(Base):
     products: Mapped["Product"] = relationship("Product", uselist=True)
     # accessories: Mapped[list["Accessory"]] = relationship()
 
-    def __str__(self):
-        return (f"{self.__class__.__name__}(id={self.id},"
-                f"name={self.name!r},")
+    def to_read_model(self) -> CategoryReturn:
+        return CategoryReturn(
+            id=self.id,
+            name=self.name,
+        )
 
-    def __repr__(self):
-        return str(self)
+    # def __str__(self):
+    #     return (f"{self.__class__.__name__}(id={self.id},"
+    #             f"name={self.name!r},")
+
+    # def __repr__(self):
+    #     return str(self)
 
 class Product(Base):
     __tablename__ = "products"

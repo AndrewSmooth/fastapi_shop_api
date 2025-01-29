@@ -6,8 +6,8 @@ import aiofiles
 from typing import Annotated
 from contextlib import asynccontextmanager
 
-from database import database
-from goods.router import goods
+from core.database import database
+from api.routers import all_routers
 
 absolute_path = pathlib.Path(__file__)
 root_path = pathlib.PurePath(absolute_path).parents[1]
@@ -18,8 +18,10 @@ async def lifespan(application: FastAPI):
     yield
     await database.disconnect()
 
-app = FastAPI(lifespan=lifespan)
-app.include_router(goods)
+app = FastAPI(lifespan=lifespan, title="Shop")
+
+for router in all_routers:
+    app.include_router(router)
 app.mount("/static", StaticFiles(directory="/media/andrew/DATA/FastAPI-Shop-Study/static"), name="static")
 
 
@@ -37,3 +39,10 @@ async def create_upload_file(file: UploadFile):
         content = await file.read()  # async read
         await out_file.write(content)  # async write
     return {"file": file.file}
+
+
+
+# if __name__ == "__main__":
+#     uvicorn.run(app="main:app", reload=True)
+
+

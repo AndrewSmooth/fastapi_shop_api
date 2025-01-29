@@ -17,8 +17,8 @@ if config.config_file_name is not None:
 
 target_metadata = None
 
-from src.database import Base, DATABASE_URL
-from src.models import *
+from core.database import Base, DATABASE_URL
+from models.goods import *
 
 config.set_main_option("sqlalchemy.url", DATABASE_URL + "?async_fallback=True")
 
