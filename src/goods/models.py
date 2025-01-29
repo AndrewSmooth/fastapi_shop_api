@@ -8,27 +8,13 @@ from database import Base
 
 intpk = Annotated[int, mapped_column(autoincrement=True, primary_key=True)]
 
-
-class AdditionalImage(Base):
-    __tablename__ = "ads"
-
-    id: Mapped[intpk]
-    path: Mapped[str]
-    product: Mapped["Product"] = relationship()
-    product_fk: Mapped[int] = mapped_column(ForeignKey("products.id"))
-
-class Size(Base):
-    __tablename__ = "sizes"
-    
-    id: Mapped[intpk]
-    name: Mapped[str]
-
 class Category(Base):
     __tablename__ = "categories"
 
     id: Mapped[intpk]
     name: Mapped[str] = mapped_column(String(50), nullable=False)
-    # accessories: Mapped[list["Accessory"]] = relationship(back_populates="category", uselist=True)
+    products: Mapped["Product"] = relationship("Product", uselist=True)
+    # accessories: Mapped[list["Accessory"]] = relationship()
 
     def __str__(self):
         return (f"{self.__class__.__name__}(id={self.id},"
@@ -47,11 +33,10 @@ class Product(Base):
     price: Mapped[float] = mapped_column(nullable=False)
     rating: Mapped[float] = mapped_column(nullable=True)
     amount: Mapped[int] = mapped_column(nullable=False)
-
-    category: Mapped["Category"] = relationship()
-    category_fk: Mapped[int] = mapped_column(ForeignKey("categories.id"))
-    size: Mapped["Size"] = relationship()
-    size_fk: Mapped[int] = mapped_column(ForeignKey("sizes.id"))
+    category_id: Mapped[int] = mapped_column(ForeignKey("categories.id"))
+    # category: Mapped["Category"] = mapped_column(nullable=False)
+    # size: Mapped["Size"] = relationship()
+    # size_fk: Mapped[int] = mapped_column(ForeignKey("sizes.id"))
     # ads: Mapped["AdditionalImage"] = relationship()
     # ads_fk: Mapped[int] = mapped_column(ForeignKey("ads.id"))
     
@@ -61,3 +46,18 @@ class Product(Base):
 
     def __repr__(self):
         return str(self)
+
+
+# class AdditionalImage(Base):
+#     __tablename__ = "ads"
+
+#     id: Mapped[intpk]
+#     path: Mapped[str]
+#     product: Mapped["Product"] = relationship()
+#     product_fk: Mapped[int] = mapped_column(ForeignKey("products.id"))
+
+# class Size(Base):
+#     __tablename__ = "sizes"
+    
+#     id: Mapped[intpk]
+#     name: Mapped[str]
