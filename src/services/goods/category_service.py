@@ -1,4 +1,4 @@
-from schemas.goods.category import CategoryCreate
+from schemas.goods import CategoryCreate
 from repositories.base_repository import AbstractRepository
 
 
@@ -6,14 +6,32 @@ class CategoryService:
     def __init__(self, category_repo: AbstractRepository):
         self.category_repo: AbstractRepository = category_repo()
 
-    # async def add_category(self, category: CategoryCreate):
-    #     category_dict = category.model_dump()
-    #     category_id = await self.category_repo.add_one(category_dict)
-    #     return category_id
+    async def add_category(self, data: CategoryCreate):
+        data_dict = data.model_dump()
+        category_id = await self.category_repo.add_one(data_dict)
+        return category_id
+
+    async def edit_category(self, id: int, data: CategoryCreate):
+        data_dict = data.model_dump()
+        category_id = await self.category_repo.edit_one(id, data_dict)
+        return category_id
+    
+    async def delete_category(self, id: int):
+        category_id = await self.category_repo.delete_one(id)
+        return category_id
+    
+    async def get_category(self, id: int):
+        category = await self.category_repo.get_one(id)
+        return category
 
     async def get_categorires(self):
-        categories = await self.category_repo.find_all()
+        categories = await self.category_repo.get_all()
         return categories
+    
+
+
+
+
 
 
 # from sqlalchemy import update, delete

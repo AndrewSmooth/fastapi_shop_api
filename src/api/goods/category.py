@@ -1,28 +1,40 @@
 from fastapi import APIRouter, status, HTTPException
-from functools import wraps
 
 # from services.goods.category import add_category, return_category, change_category, drop_category, add_product
-from services.goods.category_service import CategoryService
-from schemas.goods.category import ProductCreate, ProductReturn, CategoryCreate, CategoryReturn, SizeCreate, SizeReturn, AdditionalImageCreate, AdditionalImageReturn 
-from .dependencies import category_service
+from schemas.goods import CategoryCreate, CategoryReturn
+from ..dependencies import category_service, check_result
 
-router = APIRouter(prefix="/goods", tags=["goods"])
+router = APIRouter(prefix="/category", tags=["Category"])
 
-def check_result(func):
-    @wraps(func)
-    async def wrapper(*args, **kwargs):
-        result = await func(*args, **kwargs)
-        if not result:
-            raise HTTPException(404, 'There is no object with this id')
-        return result
 
-    return wrapper
+@router.post("", response_model=CategoryReturn)
+@check_result
+async def add_category(data: CategoryCreate): #Resp model
+    result = await category_service().add_category(data)
+    return result
 
-@router.get("/get_categories")
+@router.put("/{category_id}", response_model=CategoryReturn)
+@check_result
+async def edit_category(category_id: int, data: CategoryCreate): 
+    result = await category_service().edit_category(category_id, data)
+    return result
+
+@router.delete("/{category_id}")
+@check_result
+async def delete_category(category_id: int): 
+    result = await category_service().delete_category(category_id)
+    return result
+
+@router.get("/{category_id}", response_model=CategoryReturn)
+@check_result
+async def get_category(category_id: int): 
+    result = await category_service().get_category(category_id)
+    return result
+
+@router.get("")
 @check_result
 async def get_categories():
     result = await category_service().get_categorires()
-    print("RESULT:", result)
     return result
 
 # @goods.get("/get_category/{category_id}", response_model=CategoryReturn)

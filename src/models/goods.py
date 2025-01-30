@@ -1,11 +1,10 @@
-from sqlalchemy import ForeignKey, text, Text, String, Sequence
+from sqlalchemy import ForeignKey, String
 from sqlalchemy.orm import relationship, Mapped, mapped_column
 
-from datetime import date
 from typing import Annotated
 
 from core.database import Base
-from schemas.goods.category import CategoryReturn
+from schemas.goods import CategoryReturn, ProductReturn, AdsReturn, SizeReturn
 
 
 intpk = Annotated[int, mapped_column(autoincrement=True, primary_key=True)]
@@ -15,8 +14,8 @@ class Category(Base):
 
     id: Mapped[intpk]
     name: Mapped[str] = mapped_column(String(50), nullable=False)
-    products: Mapped["Product"] = relationship("Product", uselist=True)
-    # accessories: Mapped[list["Accessory"]] = relationship()
+    products: Mapped[list["Product"]] = relationship(back_populates="category", uselist=True)
+    # category.products.append(product)
 
     def to_read_model(self) -> CategoryReturn:
         return CategoryReturn(
@@ -24,12 +23,13 @@ class Category(Base):
             name=self.name,
         )
 
-    # def __str__(self):
-    #     return (f"{self.__class__.__name__}(id={self.id},"
-    #             f"name={self.name!r},")
+    def __str__(self):
+        return (f"{self.__class__.__name__}(id={self.id},"
+                f"name={self.name!r},")
 
-    # def __repr__(self):
-    #     return str(self)
+    def __repr__(self):
+        return str(self)
+
 
 class Product(Base):
     __tablename__ = "products"
@@ -41,13 +41,25 @@ class Product(Base):
     price: Mapped[float] = mapped_column(nullable=False)
     rating: Mapped[float] = mapped_column(nullable=True)
     amount: Mapped[int] = mapped_column(nullable=False)
-    category_id: Mapped[int] = mapped_column(ForeignKey("categories.id"))
-    # category: Mapped["Category"] = mapped_column(nullable=False)
-    # size: Mapped["Size"] = relationship()
-    # size_fk: Mapped[int] = mapped_column(ForeignKey("sizes.id"))
-    # ads: Mapped["AdditionalImage"] = relationship()
-    # ads_fk: Mapped[int] = mapped_column(ForeignKey("ads.id"))
+    category: Mapped["Category"] = relationship(back_populates="products", uselist=False)
+    category_fk: Mapped[int] = mapped_column(ForeignKey("categories.id"))
+    size: Mapped["Size"] = relationship(back_populates="products", uselist=False)
+    size_fk: Mapped[int] = mapped_column(ForeignKey("sizes.id"))
+    ads: Mapped[list["AdditionalImage"]] = relationship(back_populates="product", uselist=True) 
     
+    def to_read_model(self) -> ProductReturn:
+        return ProductReturn(
+            id=self.id,
+            name=self.name,
+            description=self.description,
+            image=self.image,
+            price=self.price,
+            rating=self.rating,
+            amount=self.amount,
+            category_id=self.category_fk,
+            size_id=self.size_fk,
+        )
+
     def __str__(self):
         return (f"{self.__class__.__name__}(id={self.id}, "
                 f"name={self.name!r},")
@@ -56,16 +68,35 @@ class Product(Base):
         return str(self)
 
 
-# class AdditionalImage(Base):
-#     __tablename__ = "ads"
+class AdditionalImage(Base):
+    __tablename__ = "ads"
 
-#     id: Mapped[intpk]
-#     path: Mapped[str]
-#     product: Mapped["Product"] = relationship()
-#     product_fk: Mapped[int] = mapped_column(ForeignKey("products.id"))
+    id: Mapped[intpk]
+    path: Mapped[str]
+    product: Mapped["Product"] = relationship(back_populates="ads", uselist=False)
+    product_fk: Mapped[int] = mapped_column(ForeignKey("products.id"))
 
-# class Size(Base):
-#     __tablename__ = "sizes"
-    
-#     id: Mapped[intpk]
-#     name: Mapped[str]
+    def to_read_model(self) -> AdsReturn:
+        return AdsReturn(
+            id=self.id,
+            path=self.path,
+            product_id=self.product_fk
+        )
+
+class ProductAds(Base):
+    __table_name__ = "product_ads"
+    id: Mapped[intpk]
+    product_fk = mapped_column(ForeignKey("products.id"))
+    ads_fk = mapped_column(ForeignKey("ads.id"))
+
+class Size(Base):
+    __tablename__ = "sizes"
+    id: Mapped[intpk]
+    name: Mapped[str]
+    products: Mapped[list["Product"]] = relationship(back_populates="size", uselist=True)
+
+    def to_read_model(self) -> SizeReturn:
+        return SizeReturn(
+            id=self.id,
+            name=self.name,
+        )
