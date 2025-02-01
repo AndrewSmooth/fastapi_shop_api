@@ -14,6 +14,8 @@ class ProductService:
         # data_dict["size_fk"]=data_dict.pop("size_id")
         # print(data_dict)
         product = await self.product_repo.add_one(data_dict)
+        print("LOG PRODUCT")
+        print(product)
         # print(product.category_fk)
         # print(product)
         return product.to_read_model()
@@ -34,4 +36,6 @@ class ProductService:
 
     async def get_products(self):
         products = await self.product_repo.get_all()
+        print("LOG")
+        print(products)
         return products

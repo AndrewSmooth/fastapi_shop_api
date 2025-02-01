@@ -13,7 +13,7 @@ class Category(Base):
     __tablename__ = "categories"
 
     id: Mapped[intpk]
-    name: Mapped[str] = mapped_column(String(50), nullable=False)
+    name: Mapped[str] = mapped_column(String(50), nullable=False, unique=True)
     products: Mapped[list["Product"]] = relationship(back_populates="category", uselist=True)
     # category.products.append(product)
 
@@ -24,11 +24,10 @@ class Category(Base):
         )
 
     def __str__(self):
-        return (f"{self.__class__.__name__}(id={self.id},"
-                f"name={self.name!r},")
+        return (f"{self.name}")
 
     def __repr__(self):
-        return str(self)
+        return str(self.name)
 
 
 class Product(Base):

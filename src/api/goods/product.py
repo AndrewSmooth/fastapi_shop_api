@@ -33,4 +33,6 @@ async def get_product(product_id: int):
 @check_result
 async def get_products():
     result = await product_service().get_products()
+    print("LOG API")
+    print(result)
     return result
