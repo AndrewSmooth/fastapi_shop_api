@@ -3,8 +3,9 @@ from abc import ABC, abstractmethod
 from sqlalchemy import insert, select, update, delete
 from sqlalchemy.exc import IntegrityError, NoResultFound
 
-from core.database import async_session_maker
-from core.exceptions import DuplicatedError, NotFoundError
+from src.core.database import async_session_maker
+# from tests.conftest import async_session_maker
+from src.core.exceptions import DuplicatedError, NotFoundError
 
 
 class AbstractRepository(ABC):

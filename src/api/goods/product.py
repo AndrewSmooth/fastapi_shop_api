@@ -1,7 +1,7 @@
 from fastapi import APIRouter, status, HTTPException
 
-from schemas.goods import ProductCreate, ProductReturn
-from ..dependencies import product_service, check_result
+from src.schemas.goods import ProductCreate, ProductReturn
+from src.api.dependencies import product_service, check_result
 
 router = APIRouter(prefix="/product", tags=["Product"])
 

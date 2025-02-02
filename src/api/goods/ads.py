@@ -1,7 +1,7 @@
 from fastapi import APIRouter, status, HTTPException
 
-from schemas.goods import AdsCreate, AdsReturn
-from ..dependencies import ads_service, check_result
+from src.schemas.goods import AdsCreate, AdsReturn
+from src.api.dependencies import ads_service, check_result
 
 router = APIRouter(prefix="/ads", tags=["Additional Images"])
 

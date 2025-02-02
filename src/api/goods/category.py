@@ -1,13 +1,13 @@
 from fastapi import APIRouter, status, HTTPException, Path
 
 # from services.goods.category import add_category, return_category, change_category, drop_category, add_product
-from schemas.goods import CategoryCreate, CategoryReturn
-from ..dependencies import category_service, check_result
+from src.schemas.goods import CategoryCreate, CategoryReturn
+from src.api.dependencies import category_service, check_result
 
 router = APIRouter(prefix="/category", tags=["Category"])
 
 
-@router.post("", response_model=CategoryReturn)
+@router.post("", response_model=CategoryReturn, status_code=status.HTTP_201_CREATED)
 @check_result
 async def add_category(data: CategoryCreate): #Resp model
     result = await category_service().add_category(data)

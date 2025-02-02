@@ -1,5 +1,5 @@
-from schemas.goods import ProductCreate
-from repositories.base_repository import AbstractRepository
+from src.schemas.goods import ProductCreate
+from src.repositories.base_repository import AbstractRepository
 
 
 class ProductService:

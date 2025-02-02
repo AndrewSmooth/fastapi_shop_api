@@ -1,5 +1,5 @@
-from schemas.goods import SizeCreate 
-from repositories.base_repository import AbstractRepository
+from src.schemas.goods import SizeCreate 
+from src.repositories.base_repository import AbstractRepository
 
 
 class SizeService:

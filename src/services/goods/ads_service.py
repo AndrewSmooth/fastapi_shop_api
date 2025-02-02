@@ -1,5 +1,5 @@
-from schemas.goods import AdsCreate
-from repositories.base_repository import AbstractRepository
+from src.schemas.goods import AdsCreate
+from src.repositories.base_repository import AbstractRepository
 
 
 class AdsService:

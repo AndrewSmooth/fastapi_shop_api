@@ -3,9 +3,9 @@ from fastapi.security import HTTPBasic, HTTPBasicCredentials, OAuth2PasswordBear
 from datetime import datetime, timezone, timedelta
 import jwt
 
-from core.config import settings
+from src.core.config import settings
 from src.main import app
-from models.goods import User
+from src.models.goods import User
 
 
 SECRET_KEY = settings.secret_key

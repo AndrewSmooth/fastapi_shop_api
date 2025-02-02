@@ -1,5 +1,5 @@
-from models.goods import Category, Product, Size, AdditionalImage
-from .base_repository import SQLAlchemyRepository
+from src.models.goods import Category, Product, Size, AdditionalImage
+from src.repositories.base_repository import SQLAlchemyRepository
 
 
 class CategoryRepository(SQLAlchemyRepository):

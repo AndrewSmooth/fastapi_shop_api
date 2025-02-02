@@ -3,8 +3,8 @@ from sqlalchemy.orm import relationship, Mapped, mapped_column
 
 from typing import Annotated
 
-from core.database import Base
-from schemas.goods import CategoryReturn, ProductReturn, AdsReturn, SizeReturn
+from src.core.database import Base
+from src.schemas.goods import CategoryReturn, ProductReturn, AdsReturn, SizeReturn
 
 
 intpk = Annotated[int, mapped_column(autoincrement=True, primary_key=True)]

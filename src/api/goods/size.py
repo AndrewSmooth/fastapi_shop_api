@@ -1,7 +1,7 @@
 from fastapi import APIRouter, status, HTTPException
 
-from schemas.goods import SizeCreate, SizeReturn
-from ..dependencies import size_service, check_result
+from src.schemas.goods import SizeCreate, SizeReturn
+from src.api.dependencies import size_service, check_result
 
 router = APIRouter(prefix="/size", tags=["Size"])
 

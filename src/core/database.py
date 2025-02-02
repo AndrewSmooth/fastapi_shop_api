@@ -1,19 +1,24 @@
 from databases import Database
-from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncAttrs
+from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncAttrs, AsyncSession
 from sqlalchemy.orm import DeclarativeBase, declared_attr
+import asyncio
 
-from core.config import settings
+from src.core.config import settings
 
 DATABASE_URL = f'postgresql+asyncpg://{settings.db.DB_USER}:{settings.db.DB_PASS}@{settings.db.DB_HOST}:{settings.db.DB_PORT}/{settings.db.DB_NAME}'
 
 database = Database(DATABASE_URL)
 
-engine = create_async_engine(DATABASE_URL) # движок для обращения к БД из питона
-async_session_maker = async_sessionmaker(engine, expire_on_commit=False) # Фабрика сессий
+def create_engine(db_url):
+    engine = create_async_engine(db_url) # движок для обращения к БД из питона
+    return engine
 
-async def get__async_session():
-    async with async_session_maker() as session:
-        yield session
+def create_sm(engine):
+    async_session_maker = async_sessionmaker(engine, class_=AsyncSession, expire_on_commit=False) # Фабрика сессий
+    return async_session_maker
+
+engine = create_engine(DATABASE_URL)
+async_session_maker = create_sm(engine)
 
 class Base(AsyncAttrs, DeclarativeBase):
     __abstract__ = True

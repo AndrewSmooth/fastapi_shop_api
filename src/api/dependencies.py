@@ -1,11 +1,11 @@
 from fastapi import HTTPException
 from functools import wraps
 
-from repositories.goods_repository import CategoryRepository, ProductRepository, SizeRepository, AdsRepository
-from services.goods.product_service import ProductService
-from services.goods.category_service import CategoryService
-from services.goods.size_service import SizeService 
-from services.goods.ads_service import AdsService
+from src.repositories.goods_repository import CategoryRepository, ProductRepository, SizeRepository, AdsRepository
+from src.services.goods.product_service import ProductService
+from src.services.goods.category_service import CategoryService
+from src.services.goods.size_service import SizeService 
+from src.services.goods.ads_service import AdsService
 
 def check_result(func):
     @wraps(func)

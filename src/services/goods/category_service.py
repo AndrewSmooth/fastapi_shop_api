@@ -1,5 +1,5 @@
-from schemas.goods import CategoryCreate
-from repositories.base_repository import AbstractRepository
+from src.schemas.goods import CategoryCreate
+from src.repositories.base_repository import AbstractRepository
 
 
 class CategoryService:
