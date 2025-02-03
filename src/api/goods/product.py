@@ -5,7 +5,7 @@ from src.api.dependencies import product_service, check_result
 
 router = APIRouter(prefix="/product", tags=["Product"])
 
-@router.post("", response_model=ProductReturn)
+@router.post("", response_model=ProductReturn, status_code=status.HTTP_201_CREATED)
 @check_result
 async def add_product(data: ProductCreate):
     result = await product_service().add_product(data)

@@ -5,7 +5,7 @@ from src.api.dependencies import size_service, check_result
 
 router = APIRouter(prefix="/size", tags=["Size"])
 
-@router.post("", response_model=SizeReturn)
+@router.post("", response_model=SizeReturn, status_code=status.HTTP_201_CREATED)
 @check_result
 async def add_size(data: SizeCreate):
     result = await size_service().add_size(data)

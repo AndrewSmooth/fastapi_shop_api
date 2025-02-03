@@ -27,7 +27,14 @@ root_path = pathlib.PurePath(absolute_path).parents[1]
 @asynccontextmanager
 async def lifespan(application: FastAPI):
     await database.connect()
+    async with engine.begin() as conn:
+        await conn.run_sync(Base.metadata.create_all)
+
     yield
+    if config.settings.MODE=="TEST":
+        async with engine.begin() as conn:
+            await conn.run_sync(Base.metadata.drop_all)
+
     await database.disconnect()
 
 app = FastAPI(lifespan=lifespan, title="Shop")

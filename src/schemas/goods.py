@@ -29,6 +29,7 @@ class ProductCreate(BaseModel):
     amount: int
     category_fk: int = Field(alias="category_id")
     size_fk: int = Field(alias="size_id")
+    
 class ProductReturn(ProductCreate):
     id: int
 

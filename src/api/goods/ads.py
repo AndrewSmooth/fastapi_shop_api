@@ -5,7 +5,7 @@ from src.api.dependencies import ads_service, check_result
 
 router = APIRouter(prefix="/ads", tags=["Additional Images"])
 
-@router.post("", response_model=AdsReturn)
+@router.post("", response_model=AdsReturn, status_code=status.HTTP_201_CREATED)
 @check_result
 async def add_ad(data: AdsCreate):
     result = await ads_service().add_ad(data)
