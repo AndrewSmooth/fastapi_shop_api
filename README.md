@@ -16,7 +16,7 @@ Follow the next steps:
 
 - Install fastapi and requirements from requirements.txt
 - Make `.env` and `.test.env` files with personal settings
-- Connect postgres. Create work db and test db. Configure their names in `.env`s
+- Connect postgres. Create work db and test db. Configure their names in `.env` files
 
 ### Steps
 
