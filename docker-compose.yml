@@ -1,0 +1,52 @@
+services:
+  nginx:
+    container_name: "nginx"
+    image: nginx:alpine
+    depends_on:
+      fastapi: 
+        condition: service_healthy
+    ports:
+      - "8082:80"
+    volumes:
+      - ./app/conf.d:/etc/nginx/conf.d
+    networks:
+      - custom
+
+  fastapi:
+    container_name: fastapi
+    build: .
+    environment: 
+      - DATABASE_URL=postgresql+asyncpg://user:password@postgres_db:5432/app
+    ports:
+      - 8000:8000
+    depends_on:
+      postgres_db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "curl http://localhost:8000/docs"]
+      interval: 15s
+      timeout: 5s
+      retries: 2
+    networks:
+      - custom
+
+  postgres_db:
+    container_name: postgres_db
+    image: postgres
+    environment:
+      POSTGRES_PASSWORD: password
+      POSTGRES_USER: user
+      POSTGRES_DB: app
+    ports:
+      - 5432:5432
+    networks:
+      - custom
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-q", "-d", "${POSTGRES_DB}", "-U", "fastapiuser", "-d", "app" ]
+      timeout: 45s
+      interval: 10s
+      retries: 10
+networks:
+  custom:
+    driver: bridge
+    name: custom
